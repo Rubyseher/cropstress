@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from 'react-bootstrap/Dropdown';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -24,6 +26,8 @@ function App() {
   const [selectedMonth2, setSelectedMonth2] = useState('January');
   const [selectedYear2, setSelectedYear2] = useState('2022');
   const [selectedIndice2, setSelectedIndice2] = useState('NDVI');
+  const [imageType, setImageType] = useState('scatter');
+  const [imageType2, setImageType2] = useState('histogram');
 
   const handleMonthChange = (month) => {
     setSelectedMonth1(month);
@@ -56,6 +60,23 @@ function App() {
     return `${selectedMonth2}_${selectedYear2}_${selectedIndice2}.png`;
   };
 
+  const handleImageTypeChange = (type) => {
+    setImageType(type);
+  };
+  const handleImageTypeChange2 = (type) => {
+    setImageType2(type);
+  };
+
+  const getImagePlotUrl = (month, year, indice,img) => {
+    if (img === 'scatter') {
+      return `${month}_${year}_${indice}_scatter.png`;
+    } else if (img === 'histogram') {
+      return `${month}_${year}_${indice}_histogram.png`;
+    } else {
+      return `${month}_${year}_${indice}_scatter.png`;
+    }
+  };
+
   return (
     <div >
       <Navbar bg="success" data-bs-theme="dark" >
@@ -71,7 +92,7 @@ function App() {
 
       <div style={{ display: 'flex' }}>
         <div >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-month">
                 {selectedMonth1}
@@ -114,8 +135,39 @@ function App() {
 
           <div style={{ marginTop: '20px', marginLeft: '10px' }}>
             <h3>Selected Image:</h3>
-            <img src={getImageUrl()} alt="Selected" style={{ maxWidth: '100%' }} />
+            <img src={getImageUrl()} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
+
+          <div style={{ marginTop: '20px' }}>
+            <h3>Image Type:</h3>
+            <ButtonGroup>
+              <ToggleButton
+                id="scatter"
+                type="radio"
+                variant="primary"
+                name="imageType"
+                value="scatter"
+                checked={imageType === 'scatter'}
+                onChange={() => handleImageTypeChange('scatter')}
+              >
+                Scatter
+              </ToggleButton>
+              <ToggleButton
+                id="histogram"
+                type="radio"
+                variant="primary"
+                name="imageType"
+                value="histogram"
+                checked={imageType === 'histogram'}
+                onChange={() => handleImageTypeChange('histogram')}
+              >
+                Histogram
+              </ToggleButton>
+            </ButtonGroup>
+          </div>
+          <img src={getImagePlotUrl(selectedMonth1, selectedYear1, selectedIndice1,imageType)} alt="Selected" style={{ width: '600px', height: '500px' }} />
+
+
         </div>
 
         <div>
@@ -162,8 +214,40 @@ function App() {
 
           <div style={{ marginTop: '20px', marginLeft: '10px' }}>
             <h3>Selected Image:</h3>
-            <img src={getImageUrl2()} alt="Selected" style={{ width: '100%' }} />
+            <img src={getImageUrl2()} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
+
+          <div style={{ marginTop: '20px' }}>
+            <h3>Image Type:</h3>
+            <ButtonGroup>
+              <ToggleButton
+                id="scatter2"
+                type="radio"
+                variant="primary"
+                name="imageType2"
+                value="scatter"
+                checked={imageType2 === 'scatter'}
+                onChange={() => handleImageTypeChange2('scatter')}
+              >
+                Scatter
+              </ToggleButton>
+              <ToggleButton
+                id="histogram2"
+                type="radio"
+                variant="primary"
+                name="imageType2"
+                value="histogram"
+                checked={imageType2 === 'histogram'}
+                onChange={() => handleImageTypeChange2('histogram')}
+              >
+                Histogram
+              </ToggleButton>
+            </ButtonGroup>
+          </div>
+          <img src={getImagePlotUrl(selectedMonth2, selectedYear2, selectedIndice2,imageType2)} alt="Selected" style={{ width: '600px', height: '500px' }} />
+
+
+
         </div>
       </div>
 

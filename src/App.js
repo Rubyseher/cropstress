@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from 'react-bootstrap/Dropdown';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
+// import ButtonGroup from 'react-bootstrap/ButtonGroup';
+// import ToggleButton from 'react-bootstrap/ToggleButton';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLeaf } from '@fortawesome/free-solid-svg-icons'
+import Carousel from 'react-bootstrap/Carousel';
+
 import './App.css';
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
   ];
 
   const years = ['2018', '2019', '2020', '2021', '2022', '2023'];
+  const carouselType = ['scatter', 'histogram'];
 
   const indice = ['NDVI', 'TVI', 'NDMI'];
 
@@ -26,8 +29,8 @@ function App() {
   const [selectedMonth2, setSelectedMonth2] = useState('January');
   const [selectedYear2, setSelectedYear2] = useState('2022');
   const [selectedIndice2, setSelectedIndice2] = useState('NDVI');
-  const [imageType, setImageType] = useState('scatter');
-  const [imageType2, setImageType2] = useState('histogram');
+  // const [imageType, setImageType] = useState('scatter');
+  // const [imageType2, setImageType2] = useState('histogram');
 
   const handleMonthChange = (month) => {
     setSelectedMonth1(month);
@@ -60,22 +63,38 @@ function App() {
     return `${selectedMonth2}_${selectedYear2}_${selectedIndice2}.png`;
   };
 
-  const handleImageTypeChange = (type) => {
-    setImageType(type);
-  };
-  const handleImageTypeChange2 = (type) => {
-    setImageType2(type);
+  // const handleImageTypeChange = (type) => {
+  //   setImageType(type);
+  // };
+  // const handleImageTypeChange2 = (type) => {
+  //   setImageType2(type);
+  // };
+
+  const renderCarouselItems = (month, year, indice) => {
+    return carouselType.map((type) => (
+      <Carousel.Item key={type}>
+        <img
+          className="d-block w-100"
+          src={`${month}_${year}_${indice}_${type}.png`}
+          alt={`${month} ${year} ${indice}`}
+        />
+        <Carousel.Caption>
+          {/* <h3 style={{color:'black'}}>{`${type}`}</h3> */}
+        </Carousel.Caption>
+      </Carousel.Item>
+     ));
   };
 
-  const getImagePlotUrl = (month, year, indice,img) => {
-    if (img === 'scatter') {
-      return `${month}_${year}_${indice}_scatter.png`;
-    } else if (img === 'histogram') {
-      return `${month}_${year}_${indice}_histogram.png`;
-    } else {
-      return `${month}_${year}_${indice}_scatter.png`;
-    }
-  };
+
+  // const getImagePlotUrl = (month, year, indice, img) => {
+  //   if (img === 'scatter') {
+  //     return `${month}_${year}_${indice}_scatter.png`;
+  //   } else if (img === 'histogram') {
+  //     return `${month}_${year}_${indice}_histogram.png`;
+  //   } else {
+  //     return `${month}_${year}_${indice}_scatter.png`;
+  //   }
+  // };
 
   return (
     <div >
@@ -138,7 +157,7 @@ function App() {
             <img src={getImageUrl()} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
-          <div style={{ marginTop: '20px' }}>
+          {/* <div style={{ marginTop: '20px' }}>
             <h3>Image Type:</h3>
             <ButtonGroup>
               <ToggleButton
@@ -164,10 +183,13 @@ function App() {
                 Histogram
               </ToggleButton>
             </ButtonGroup>
+          </div> */}
+          {/* <img src={getImagePlotUrl(selectedMonth1, selectedYear1, selectedIndice1, imageType)} alt="Selected" style={{ width: '600px', height: '500px' }} /> */}
+          <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
+            <Carousel>
+              {renderCarouselItems(selectedMonth1, selectedYear1, selectedIndice1)}
+            </Carousel>
           </div>
-          <img src={getImagePlotUrl(selectedMonth1, selectedYear1, selectedIndice1,imageType)} alt="Selected" style={{ width: '600px', height: '500px' }} />
-
-
         </div>
 
         <div>
@@ -217,7 +239,7 @@ function App() {
             <img src={getImageUrl2()} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
-          <div style={{ marginTop: '20px' }}>
+          {/* <div style={{ marginTop: '20px' }}>
             <h3>Image Type:</h3>
             <ButtonGroup>
               <ToggleButton
@@ -243,10 +265,14 @@ function App() {
                 Histogram
               </ToggleButton>
             </ButtonGroup>
+          </div> */}
+          {/* <img src={getImagePlotUrl(selectedMonth2, selectedYear2, selectedIndice2, imageType2)} alt="Selected" style={{ width: '600px', height: '500px' }} /> */}
+
+          <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
+            <Carousel>
+              {renderCarouselItems(selectedMonth2, selectedYear2, selectedIndice2)}
+            </Carousel>
           </div>
-          <img src={getImagePlotUrl(selectedMonth2, selectedYear2, selectedIndice2,imageType2)} alt="Selected" style={{ width: '600px', height: '500px' }} />
-
-
 
         </div>
       </div>

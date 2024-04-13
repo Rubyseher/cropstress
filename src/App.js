@@ -18,10 +18,9 @@ function App() {
     'May', 'June', 'July', 'August',
     'September', 'October', 'November', 'December'
   ];
-
   const years = ['2018', '2019', '2020', '2021', '2022', '2023'];
   const carouselType = ['scatter', 'histogram'];
-
+  const timelapseValues = ['Nov 2021 - Apr 2022', 'Nov 2022 - Apr 2023','Nov 2021 - Apr 2022 & Nov 2022 - Apr 2023'];
   const indice = ['NDVI', 'TVI', 'NDMI'];
 
   const [selectedMonth1, setSelectedMonth1] = useState('January');
@@ -30,32 +29,23 @@ function App() {
   const [selectedMonth2, setSelectedMonth2] = useState('January');
   const [selectedYear2, setSelectedYear2] = useState('2022');
   const [selectedIndice2, setSelectedIndice2] = useState('NDVI');
+  const [showTimeLapse, setShowTimeLapse] = useState(false);
+  const [selectedTimeLapse, setSelectedTimeLapse] = useState('Nov 2021 - Apr 2022');
+
   // const [imageType, setImageType] = useState('scatter');
   // const [imageType2, setImageType2] = useState('histogram');
 
-  const handleMonthChange = (month) => {
-    setSelectedMonth1(month);
-  };
+  const handleMonthChange = (month) => {setSelectedMonth1(month);};
 
-  const handleYearChange = (year) => {
-    setSelectedYear1(year);
-  };
+  const handleYearChange = (year) => {setSelectedYear1(year);};
 
-  const handleIndiceChange = (indice) => {
-    setSelectedIndice1(indice);
-  };
+  const handleIndiceChange = (indice) => {setSelectedIndice1(indice);};
 
-  const handleMonthChange2 = (month) => {
-    setSelectedMonth2(month);
-  };
+  const handleMonthChange2 = (month) => {setSelectedMonth2(month);};
 
-  const handleYearChange2 = (year) => {
-    setSelectedYear2(year);
-  };
+  const handleYearChange2 = (year) => {setSelectedYear2(year);};
 
-  const handleIndiceChange2 = (indice) => {
-    setSelectedIndice2(indice);
-  };
+  const handleIndiceChange2 = (indice) => {setSelectedIndice2(indice);};
 
   const getImageUrl = () => {
     return `${selectedMonth1}_${selectedYear1}_${selectedIndice1}.png`;
@@ -83,7 +73,7 @@ function App() {
           {/* <h3 style={{color:'black'}}>{`${type}`}</h3> */}
         </Carousel.Caption>
       </Carousel.Item>
-     ));
+    ));
   };
 
 
@@ -107,13 +97,14 @@ function App() {
           </Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#timelapse" onClick={() => setShowTimeLapse(!showTimeLapse)}>TimeLapse</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
 
       <br />
 
-      <div style={{ display: 'flex' }}>
+      {showTimeLapse && <div style={{ display: 'flex' }}>
         <div >
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
             <Dropdown>
@@ -279,6 +270,44 @@ function App() {
           </div>
 
         </div>
+      </div>
+      }
+
+      <div >
+        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+
+          <Dropdown style={{ marginLeft: '10px'  }}>
+            <Dropdown.Toggle id="dropdown-year" style={{width:430,textAlign:'left',padding:'15px 20px',backgroundColor:'#A7dca5',color:'black',borderColor:'#A7dca5'}}>
+              <b>{selectedTimeLapse}</b>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {timelapseValues.map((year) => (
+                <Dropdown.Item key={year} onClick={() => setSelectedTimeLapse(year)}>
+                  {year}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+
+          <Dropdown style={{ marginLeft: '10px' }}>
+            <Dropdown.Toggle id="dropdown-year" style={{width:130,textAlign:'left',padding:'15px 20px',backgroundColor:'#A7dca5',color:'black',borderColor:'#A7dca5'}}>
+              <b>{selectedIndice1}</b>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {indice.map((indice) => (
+                <Dropdown.Item key={indice} onClick={() => handleIndiceChange(indice)}>
+                  {indice}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+
+        <div style={{ marginTop: '20px', marginLeft: '10px' }}>
+            <h3>Selected Image:</h3>
+            <img src={getImageUrl()} alt="Selected" style={{ width: '700px', height: '600px' }} />
+          </div>
+          
       </div>
 
     </div>

@@ -9,19 +9,46 @@ import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLeaf } from '@fortawesome/free-solid-svg-icons'
 import Carousel from 'react-bootstrap/Carousel';
-
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { getStorage, ref } from "firebase/storage";
 import './App.css';
-import { faTruckFieldUn } from '@fortawesome/free-solid-svg-icons/faTruckFieldUn';
-import { faTruckField } from '@fortawesome/free-solid-svg-icons/faTruckField';
 
 function App() {
+  const firebaseConfig = {
+    apiKey: "AIzaSyBtTEC905xGlgu96WGfJdKdhQnqKE6lE7M",
+    authDomain: "cropstress-c9265.firebaseapp.com",
+    projectId: "cropstress-c9265",
+    storageBucket: "cropstress-c9265.appspot.com",
+    messagingSenderId: "963525220412",
+    appId: "1:963525220412:web:319a7d4f8661911c210b39",
+    measurementId: "G-DE4PJTD0Y9"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  // async function getCities(db) {
+  //   const citiesCol = collection(db, 'cities');
+  //   const citySnapshot = await getDocs(citiesCol);
+  //   const cityList = citySnapshot.docs.map(doc => doc.data());
+  //   return cityList;
+  // }
+  const storage = getStorage();
+  const storageRef = ref(storage);
+
   const months = [
-    'January', 'February', 'March', 'April',
-    'May', 'June', 'July', 'August',
-    'September', 'October', 'November', 'December'
+    'February', 'December'
   ];
-  const years = ['2018', '2019', '2020', '2021', '2022', '2023'];
-  const carouselType = ['scatter', 'histogram'];
+  const years = ['2021'];
+  const carouselType = [
+    'scatter1', 'scatter2', 'scatter3',
+    'scatter4', 'scatter5', 'scatter6',
+    'scatter7', 'scatter8', 'scatter9',
+    'scatter10', 'scatter11', 'scatter12',
+    'scatter13', 'scatter14', 'scatter15',
+    'scatter16', 'scatter17', 'scatter18'
+  ];
   const timelapseValues = ['Nov 2021 - Apr 2022', 'Nov 2022 - Apr 2023', 'Nov 2021 - Apr 2022 & Nov 2022 - Apr 2023'];
   const indice = ['NDVI', 'TVI', 'NDMI'];
 
@@ -33,6 +60,20 @@ function App() {
   const [selectedIndice2, setSelectedIndice2] = useState('NDVI');
   const [showTimeLapse, setShowTimeLapse] = useState(false);
   const [selectedTimeLapse, setSelectedTimeLapse] = useState('Nov 2021 - Apr 2022');
+  const [showHomePage, setShowHomePage] = useState(true);
+  const backgroundStyle = {
+    backgroundImage: 'url(cropBg3.jpg)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white',
+    FontWeight: 'bold',
+    fontSize: '34px',
+    textAlign: 'center',
+  };
 
   const handleMonthChange = (month) => { setSelectedMonth1(month); };
 
@@ -58,7 +99,7 @@ function App() {
       <Carousel.Item key={type}>
         <img
           className="d-block w-100"
-          src={`${month}_${year}_${indice}_${type}.png`}
+          src={`./images/${month}_${year}_${indice}_${type}.png`}
           alt={`${month} ${year} ${indice}`}
         />
       </Carousel.Item>
@@ -80,20 +121,29 @@ function App() {
     <div >
       <Navbar bg="success" data-bs-theme="dark" >
         <Container style={{ margin: '5px 0px 5px 50px ' }}>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand href="#home" onClick={() => { setShowHomePage(true); setShowTimeLapse(false) }}>
             <FontAwesomeIcon icon={faLeaf} size='xl' style={{ marginRight: '15px' }} color="var(--blue)" />
             <b>Team 13</b>
           </Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home" onClick={() => setShowTimeLapse(false)}>Home</Nav.Link>
-            <Nav.Link href="#timelapse" onClick={() => setShowTimeLapse(true)}>TimeLapse</Nav.Link>
+          <Nav className="me-auto" >
+            <Nav.Link href="#home" style={{ color: 'white' }} onClick={() => { setShowTimeLapse(false); setShowHomePage(false) }}><b>Home</b></Nav.Link>
+            <Nav.Link href="#timelapse" style={{ color: 'white' }} onClick={() => { setShowTimeLapse(true); setShowHomePage(false) }}><b>TimeLapse</b></Nav.Link>
           </Nav>
         </Container>
       </Navbar>
 
+
+      {
+        showHomePage === true && <div style={backgroundStyle}>
+          {/* <img src='cropBg3.jpg' alt="Selected"  style={{height:'103vh',width:'176vh'}} /> */}
+          <div onClick={() => { setShowTimeLapse(false); setShowHomePage(false) }}>
+            <h1 style={{ fontSize: '83px' }}>Crop Stress Management</h1>
+          </div>
+        </div>
+      }
       <br />
 
-      {showTimeLapse === false && <div style={{ display: 'flex' }}>
+      {showTimeLapse === false && showHomePage === false && <div style={{ display: 'flex' }}>
         <div >
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
             <Dropdown>
@@ -264,7 +314,7 @@ function App() {
 
       {showTimeLapse === true && <div >
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
-          <Dropdown  style={{ marginLeft: '10px' }}>
+          <Dropdown style={{ marginLeft: '10px' }}>
             <Dropdown.Toggle id="dropdown-year" variant="success" >
               <b>{selectedIndice1}</b>
             </Dropdown.Toggle>

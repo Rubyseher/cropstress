@@ -37,7 +37,7 @@ function App() {
   const [showHomePage, setShowHomePage] = useState(true);
 
   const backgroundStyle = {
-    backgroundImage: 'url(cropBg3.jpg)',
+    backgroundImage: 'url(cropBg2.jpg)',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100vh',

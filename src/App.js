@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useContext, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
@@ -14,43 +14,26 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { getStorage, ref } from "firebase/storage";
 import './App.css';
+import useDB from './useDB';
 
 function App() {
-  const firebaseConfig = {
-    apiKey: "AIzaSyBtTEC905xGlgu96WGfJdKdhQnqKE6lE7M",
-    authDomain: "cropstress-c9265.firebaseapp.com",
-    projectId: "cropstress-c9265",
-    storageBucket: "cropstress-c9265.appspot.com",
-    messagingSenderId: "963525220412",
-    appId: "1:963525220412:web:319a7d4f8661911c210b39",
-    measurementId: "G-DE4PJTD0Y9"
-  };
-  
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
   // async function getCities(db) {
   //   const citiesCol = collection(db, 'cities');
   //   const citySnapshot = await getDocs(citiesCol);
   //   const cityList = citySnapshot.docs.map(doc => doc.data());
   //   return cityList;
   // }
-  const storage = getStorage();
-  const storageRef = ref(storage);
-
   const months = [
     'February', 'December'
   ];
   const years = ['2021'];
   const carouselType = [
-    'scatter1', 'scatter2', 'scatter3',
-    'scatter4', 'scatter5', 'scatter6',
-    'scatter7', 'scatter8', 'scatter9',
-    'scatter10', 'scatter11', 'scatter12',
-    'scatter13', 'scatter14', 'scatter15',
-    'scatter16', 'scatter17', 'scatter18'
+    'scatter1', 'scatter2'
+
   ];
   const timelapseValues = ['Nov 2021 - Apr 2022', 'Nov 2022 - Apr 2023', 'Nov 2021 - Apr 2022 & Nov 2022 - Apr 2023'];
   const indice = ['NDVI', 'TVI', 'NDMI'];
+  const [imageList1,setImagesList1] = useState([]);
 
   const [selectedMonth1, setSelectedMonth1] = useState('January');
   const [selectedYear1, setSelectedYear1] = useState('2022');
@@ -88,7 +71,8 @@ function App() {
   const handleIndiceChange2 = (indice) => { setSelectedIndice2(indice); };
 
   const getImageUrl = () => {
-    return `${selectedMonth1}_${selectedYear1}_${selectedIndice1}.png`;
+    return imageList1[0];
+    // return `${selectedMonth1}_${selectedYear1}_${selectedIndice1}.png`;
   };
   const getImageUrl2 = () => {
     return `${selectedMonth2}_${selectedYear2}_${selectedIndice2}.png`;
@@ -105,6 +89,15 @@ function App() {
       </Carousel.Item>
     ));
   };
+
+  const {getStorageItem} = useDB();
+  
+useEffect(() => {
+  getStorageItem('2022/February/NDVI/1-1.5_NDVI_02_02_2022.png', (url) => {
+    console.log(url);
+    setImagesList1([url])
+})
+}, [])
 
 
   // const getImagePlotUrl = (month, year, indice, img) => {
@@ -188,7 +181,7 @@ function App() {
 
           <div style={{ marginTop: '20px', marginLeft: '10px' }}>
             <h3>Selected Image:</h3>
-            <img src={getImageUrl()} alt="Selected" style={{ width: '700px', height: '600px' }} />
+            <img src={imageList1[0]  } alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
           {/* <div style={{ marginTop: '20px' }}>
@@ -219,11 +212,11 @@ function App() {
             </ButtonGroup>
           </div> */}
           {/* <img src={getImagePlotUrl(selectedMonth1, selectedYear1, selectedIndice1, imageType)} alt="Selected" style={{ width: '600px', height: '500px' }} /> */}
-          <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
+          {/* <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
             <Carousel>
               {renderCarouselItems(selectedMonth1, selectedYear1, selectedIndice1)}
             </Carousel>
-          </div>
+          </div> */}
         </div>
 
         <div>

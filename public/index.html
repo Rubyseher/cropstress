@@ -30,6 +30,21 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-analytics.js"></script>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyBtTEC905xGlgu96WGfJdKdhQnqKE6lE7M",
+      authDomain: "cropstress-c9265.firebaseapp.com",
+      projectId: "cropstress-c9265",
+      storageBucket: "cropstress-c9265.appspot.com",
+      messagingSenderId: "963525220412",
+      appId: "1:963525220412:web:319a7d4f8661911c210b39",
+      measurementId: "G-DE4PJTD0Y9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

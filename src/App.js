@@ -167,7 +167,7 @@ function App() {
         <div >
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
             <Dropdown style={{ marginLeft: '10px' }}>
-              <Dropdown.Toggle variant="success" id="dropdown-year"> {selectedYear1}</Dropdown.Toggle>
+              <Dropdown.Toggle variant="outline-success" id="dropdown-year"> <b>{selectedYear1}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((year) => (
                   <Dropdown.Item key={year} onClick={() => handleYearChange(year)}>{year}</Dropdown.Item>
@@ -176,7 +176,7 @@ function App() {
             </Dropdown>
 
             <Dropdown style={{ marginLeft: '10px' }}>
-              <Dropdown.Toggle variant="success" id="dropdown-month">{selectedMonth1}</Dropdown.Toggle>
+              <Dropdown.Toggle variant="outline-success" id="dropdown-month"><b>{selectedMonth1}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {months[selectedYear1].map((month) => (
                   <Dropdown.Item key={month} onClick={() => handleMonthChange(month)}>{month}</Dropdown.Item>
@@ -185,7 +185,7 @@ function App() {
             </Dropdown>
 
             <Dropdown style={{ marginLeft: '10px' }}>
-              <Dropdown.Toggle variant="success" id="dropdown-year">{selectedIndice1}</Dropdown.Toggle>
+              <Dropdown.Toggle variant="outline-success" id="dropdown-year"><b>{selectedIndice1}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {indice.map((indice) => (
                   <Dropdown.Item key={indice} onClick={() => handleIndiceChange(indice)}>{indice}</Dropdown.Item>
@@ -261,7 +261,7 @@ function App() {
       </div>
       }
 
-      {/* {showTimeLapse === true && <div >
+      {showTimeLapse === true && <div >
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
           <Dropdown style={{ marginLeft: '10px' }}>
             <Dropdown.Toggle id="dropdown-year" variant="success" >
@@ -283,7 +283,7 @@ function App() {
         </div>
 
       </div>
-      } */}
+      }
 
     </div>
   );

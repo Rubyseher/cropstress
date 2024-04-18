@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
@@ -9,37 +9,21 @@ import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLeaf } from '@fortawesome/free-solid-svg-icons'
 import Carousel from 'react-bootstrap/Carousel';
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-import { getStorage, ref } from "firebase/storage";
 import './App.css';
 import useDB from './useDB';
 
 function App() {
-  // async function getCities(db) {
-  //   const citiesCol = collection(db, 'cities');
-  //   const citySnapshot = await getDocs(citiesCol);
-  //   const cityList = citySnapshot.docs.map(doc => doc.data());
-  //   return cityList;
-  // }
   const months = {
     2021: ['November', 'December'],
     2022: ['November', 'December', 'January', 'February', 'March', 'April'],
     2023: ['January', 'February', 'March', 'April']
   };
   const years = [2021, 2022, 2023];
-  const carouselType = [
-    'scatter1', 'scatter2'
-
-  ];
-  const timelapseValues = ['Nov 2021 - Apr 2022', 'Nov 2022 - Apr 2023', 'Nov 2021 - Apr 2022 & Nov 2022 - Apr 2023'];
   const indice = ['NDVI', 'TVI', 'NDMI'];
   const [imageList1, setImagesList1] = useState([]);
   const [imageList2, setImagesList2] = useState([]);
   const [baseImg1, setBaseImg1] = useState();
   const [baseImg2, setBaseImg2] = useState();
-
 
   const [selectedMonth1, setSelectedMonth1] = useState(months['2022'][0]);
   const [selectedYear1, setSelectedYear1] = useState('2022');
@@ -49,7 +33,6 @@ function App() {
   const [selectedIndice2, setSelectedIndice2] = useState('NDVI');
 
   const [showTimeLapse, setShowTimeLapse] = useState(false);
-  const [selectedTimeLapse, setSelectedTimeLapse] = useState('Nov 2021 - Apr 2022');
 
   const [showHomePage, setShowHomePage] = useState(true);
 
@@ -67,29 +50,15 @@ function App() {
     textAlign: 'center',
   };
 
-  const handleMonthChange = (month) => { setSelectedMonth1(month); };
-
-  const handleYearChange = (year) => { setSelectedYear1(year); setSelectedMonth1(months[year][0]) };
-
-  const handleIndiceChange = (indice) => { setSelectedIndice1(indice); };
-
-  const handleMonthChange2 = (month) => { setSelectedMonth2(month); };
-
-  const handleYearChange2 = (year) => { setSelectedYear2(year); setSelectedMonth2(months[year][0]) };
-
-  const handleIndiceChange2 = (indice) => { setSelectedIndice2(indice); };
-
-  const getBaseImg = () => {
-    if (imageList1 && imageList1.length > 0) {
-      return imageList1; // Assuming the first item in the list is the URL of the image
-    } else {
-      return 'placeholder_image_url.jpg';
+  const handleYearChange = (year,number) => { 
+    if (number === 1){
+      setSelectedYear1(year); setSelectedMonth1(months[year][0])
     }
-  };
-
-  const getImageUrl2 = () => {
-    return `${selectedMonth2}_${selectedYear2}_${selectedIndice2}.png`;
-  };
+    else if (number === 2){
+      setSelectedYear2(year); setSelectedMonth2(months[year][0])
+    }
+    else console.error('Invalid number argument:', number);
+   };
 
   const renderCarouselItems = (number) => {
     if (number === 1) {
@@ -180,7 +149,7 @@ function App() {
               <Dropdown.Toggle variant="outline-success" id="dropdown-year"> <b>{selectedYear1}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((year) => (
-                  <Dropdown.Item key={year} onClick={() => handleYearChange(year)}>{year}</Dropdown.Item>
+                  <Dropdown.Item key={year} onClick={() => handleYearChange(year,1)}>{year}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
@@ -189,7 +158,7 @@ function App() {
               <Dropdown.Toggle variant="outline-success" id="dropdown-month"><b>{selectedMonth1}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {months[selectedYear1].map((month) => (
-                  <Dropdown.Item key={month} onClick={() => handleMonthChange(month)}>{month}</Dropdown.Item>
+                  <Dropdown.Item key={month} onClick={() => setSelectedMonth1(month)}>{month}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
@@ -198,7 +167,7 @@ function App() {
               <Dropdown.Toggle variant="outline-success" id="dropdown-year"><b>{selectedIndice1}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {indice.map((indice) => (
-                  <Dropdown.Item key={indice} onClick={() => handleIndiceChange(indice)}>{indice}</Dropdown.Item>
+                  <Dropdown.Item key={indice} onClick={() => setSelectedIndice1(indice)}>{indice}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
@@ -213,13 +182,13 @@ function App() {
           </div>
         </div>
 
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+        <div style={{ marginLeft: '100px' ,borderLeft:'3px solid grey'}}>
+          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '90px' }}>
             <Dropdown style={{ marginLeft: '10px' }}>
               <Dropdown.Toggle variant="outline-success" id="dropdown-year"> <b>{selectedYear2}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((year) => (
-                  <Dropdown.Item key={year} onClick={() => handleYearChange2(year)}>{year}</Dropdown.Item>
+                  <Dropdown.Item key={year} onClick={() => handleYearChange(year,2)}>{year}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
@@ -228,7 +197,7 @@ function App() {
               <Dropdown.Toggle variant="outline-success" id="dropdown-month"><b>{selectedMonth2}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {months[selectedYear2].map((month) => (
-                  <Dropdown.Item key={month} onClick={() => handleMonthChange2(month)}>{month}</Dropdown.Item>
+                  <Dropdown.Item key={month} onClick={() => setSelectedMonth2(month)}>{month}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
@@ -237,17 +206,17 @@ function App() {
               <Dropdown.Toggle variant="outline-success" id="dropdown-year"><b>{selectedIndice2}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {indice.map((indice) => (
-                  <Dropdown.Item key={indice} onClick={() => handleIndiceChange2(indice)}>{indice}</Dropdown.Item>
+                  <Dropdown.Item key={indice} onClick={() => setSelectedIndice2(indice)}>{indice}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
           </div>
 
-          <div style={{ marginTop: '20px', marginLeft: '10px' }}>
+          <div style={{ marginTop: '20px', marginLeft: '90px' }}>
             <img src={baseImg2} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
-          <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
+          <div style={{ marginTop: '20px', width: '600px', marginLeft:'90px' }}>
             <h3>Plots:</h3><Carousel>{renderCarouselItems(2)} </Carousel>
           </div>
 
@@ -263,7 +232,7 @@ function App() {
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {indice.map((indice) => (
-                <Dropdown.Item key={indice} onClick={() => handleIndiceChange(indice)}>
+                <Dropdown.Item key={indice} onClick={() => setSelectedIndice1(indice)}>
                   {indice}
                 </Dropdown.Item>
               ))}

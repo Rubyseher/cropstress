@@ -125,7 +125,6 @@ useEffect(() => {
         </Container>
       </Navbar>
 
-
       {
         showHomePage === true && <div style={backgroundStyle}>
           {/* <img src='cropBg3.jpg' alt="Selected"  style={{height:'103vh',width:'176vh'}} /> */}
@@ -184,33 +183,6 @@ useEffect(() => {
             <img src={imageList1[0]  } alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
-          {/* <div style={{ marginTop: '20px' }}>
-            <h3>Image Type:</h3>
-            <ButtonGroup>
-              <ToggleButton
-                id="scatter"
-                type="radio"
-                variant="primary"
-                name="imageType"
-                value="scatter"
-                checked={imageType === 'scatter'}
-                onChange={() => handleImageTypeChange('scatter')}
-              >
-                Scatter
-              </ToggleButton>
-              <ToggleButton
-                id="histogram"
-                type="radio"
-                variant="primary"
-                name="imageType"
-                value="histogram"
-                checked={imageType === 'histogram'}
-                onChange={() => handleImageTypeChange('histogram')}
-              >
-                Histogram
-              </ToggleButton>
-            </ButtonGroup>
-          </div> */}
           {/* <img src={getImagePlotUrl(selectedMonth1, selectedYear1, selectedIndice1, imageType)} alt="Selected" style={{ width: '600px', height: '500px' }} /> */}
           {/* <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
             <Carousel>
@@ -219,7 +191,7 @@ useEffect(() => {
           </div> */}
         </div>
 
-        <div>
+        {/* <div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-month">
@@ -266,46 +238,17 @@ useEffect(() => {
             <img src={getImageUrl2()} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
-          {/* <div style={{ marginTop: '20px' }}>
-            <h3>Image Type:</h3>
-            <ButtonGroup>
-              <ToggleButton
-                id="scatter2"
-                type="radio"
-                variant="primary"
-                name="imageType2"
-                value="scatter"
-                checked={imageType2 === 'scatter'}
-                onChange={() => handleImageTypeChange2('scatter')}
-              >
-                Scatter
-              </ToggleButton>
-              <ToggleButton
-                id="histogram2"
-                type="radio"
-                variant="primary"
-                name="imageType2"
-                value="histogram"
-                checked={imageType2 === 'histogram'}
-                onChange={() => handleImageTypeChange2('histogram')}
-              >
-                Histogram
-              </ToggleButton>
-            </ButtonGroup>
-          </div> */}
-          {/* <img src={getImagePlotUrl(selectedMonth2, selectedYear2, selectedIndice2, imageType2)} alt="Selected" style={{ width: '600px', height: '500px' }} /> */}
-
           <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
             <Carousel>
               {renderCarouselItems(selectedMonth2, selectedYear2, selectedIndice2)}
             </Carousel>
           </div>
 
-        </div>
+        </div> */}
       </div>
       }
 
-      {showTimeLapse === true && <div >
+      {/* {showTimeLapse === true && <div >
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
           <Dropdown style={{ marginLeft: '10px' }}>
             <Dropdown.Toggle id="dropdown-year" variant="success" >
@@ -327,7 +270,7 @@ useEffect(() => {
         </div>
 
       </div>
-      }
+      } */}
 
     </div>
   );

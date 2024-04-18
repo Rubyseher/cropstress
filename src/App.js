@@ -23,10 +23,12 @@ function App() {
   //   const cityList = citySnapshot.docs.map(doc => doc.data());
   //   return cityList;
   // }
-  const months = [
-    'February', 'December'
-  ];
-  const years = ['2021'];
+  const months = {
+    2021: ['November', 'December'],
+    2022: ['November', 'December','January', 'February', 'March', 'April'],
+    2023: ['January', 'February', 'March', 'April']
+  };
+  const years = [2021, 2022, 2023];
   const carouselType = [
     'scatter1', 'scatter2'
 
@@ -37,12 +39,12 @@ function App() {
   const [imageList2, setImagesList2] = useState([]);
   const [baseImg1, setBaseImg1] = useState();
   const [baseImg2, setBaseImg2] = useState();
-  
 
-  const [selectedMonth1, setSelectedMonth1] = useState('January');
+
+  const [selectedMonth1, setSelectedMonth1] = useState(months['2022'][0]);
   const [selectedYear1, setSelectedYear1] = useState('2022');
   const [selectedIndice1, setSelectedIndice1] = useState('NDVI');
-  const [selectedMonth2, setSelectedMonth2] = useState('January');
+  const [selectedMonth2, setSelectedMonth2] = useState(months['2022'][0]);
   const [selectedYear2, setSelectedYear2] = useState('2022');
   const [selectedIndice2, setSelectedIndice2] = useState('NDVI');
 
@@ -67,13 +69,13 @@ function App() {
 
   const handleMonthChange = (month) => { setSelectedMonth1(month); };
 
-  const handleYearChange = (year) => { setSelectedYear1(year); };
+  const handleYearChange = (year) => { setSelectedYear1(year); setSelectedMonth1(months[year][0])};
 
   const handleIndiceChange = (indice) => { setSelectedIndice1(indice); };
 
   const handleMonthChange2 = (month) => { setSelectedMonth2(month); };
 
-  const handleYearChange2 = (year) => { setSelectedYear2(year); };
+  const handleYearChange2 = (year) => { setSelectedYear2(year); setSelectedMonth2(months[year][0])};
 
   const handleIndiceChange2 = (indice) => { setSelectedIndice2(indice); };
 
@@ -105,7 +107,7 @@ function App() {
 
   useEffect(() => {
     // Function to fetch images inside "2022/February" folder
-    const fetchFebruaryImages = async () => {
+    const fetchSlideShowImages = async () => {
       try {
         const folderRef = '2022/February/NDVI';
         const response = await getStorageItem(folderRef);
@@ -127,20 +129,9 @@ function App() {
         console.error('Error fetching February images:', error);
       }
     };
-    fetchFebruaryImages();
+    fetchSlideShowImages();
     fetchBaseImg()
   }, [getStorageItem]);
-
-
-  // const getImagePlotUrl = (month, year, indice, img) => {
-  //   if (img === 'scatter') {
-  //     return `${month}_${year}_${indice}_scatter.png`;
-  //   } else if (img === 'histogram') {
-  //     return `${month}_${year}_${indice}_histogram.png`;
-  //   } else {
-  //     return `${month}_${year}_${indice}_scatter.png`;
-  //   }
-  // };
 
   return (
     <div >
@@ -170,19 +161,6 @@ function App() {
       {showTimeLapse === false && showHomePage === false && <div style={{ display: 'flex' }}>
         <div >
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id="dropdown-month">
-                {selectedMonth1}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {months.map((month) => (
-                  <Dropdown.Item key={month} onClick={() => handleMonthChange(month)}>
-                    {month}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-
             <Dropdown style={{ marginLeft: '10px' }}>
               <Dropdown.Toggle variant="success" id="dropdown-year">
                 {selectedYear1}
@@ -191,6 +169,19 @@ function App() {
                 {years.map((year) => (
                   <Dropdown.Item key={year} onClick={() => handleYearChange(year)}>
                     {year}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <Dropdown style={{ marginLeft: '10px' }}>
+              <Dropdown.Toggle variant="success" id="dropdown-month">
+                {selectedMonth1}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {months[selectedYear1].map((month) => (
+                  <Dropdown.Item key={month} onClick={() => handleMonthChange(month)}>
+                    {month}
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>

@@ -25,7 +25,7 @@ function App() {
   // }
   const months = {
     2021: ['November', 'December'],
-    2022: ['November', 'December','January', 'February', 'March', 'April'],
+    2022: ['November', 'December', 'January', 'February', 'March', 'April'],
     2023: ['January', 'February', 'March', 'April']
   };
   const years = [2021, 2022, 2023];
@@ -69,13 +69,13 @@ function App() {
 
   const handleMonthChange = (month) => { setSelectedMonth1(month); };
 
-  const handleYearChange = (year) => { setSelectedYear1(year); setSelectedMonth1(months[year][0])};
+  const handleYearChange = (year) => { setSelectedYear1(year); setSelectedMonth1(months[year][0]) };
 
   const handleIndiceChange = (indice) => { setSelectedIndice1(indice); };
 
   const handleMonthChange2 = (month) => { setSelectedMonth2(month); };
 
-  const handleYearChange2 = (year) => { setSelectedYear2(year); setSelectedMonth2(months[year][0])};
+  const handleYearChange2 = (year) => { setSelectedYear2(year); setSelectedMonth2(months[year][0]) };
 
   const handleIndiceChange2 = (indice) => { setSelectedIndice2(indice); };
 
@@ -106,31 +106,36 @@ function App() {
   const { getStorageItem } = useDB();
 
   useEffect(() => {
-    // Function to fetch images inside "2022/February" folder
-    const fetchSlideShowImages = async () => {
+    const fetchSlideShowImages = async (year, month, indices, number) => {
       try {
-        const folderRef = '2022/February/NDVI';
+        const folderRef = `${year}/${month}/${indices}`;
         const response = await getStorageItem(folderRef);
         const imageUrls = response.items.map(item => item.downloadURL);
-        setImagesList1(imageUrls);
+        if (number === 1) { setImagesList1(imageUrls); }
+        else if (number === 2) { setImagesList2(imageUrls); }
+        else console.error('Invalid number argument:', number);
+
         console.log(imageUrls)
       } catch (error) {
-        console.error('Error fetching February images:', error);
+        console.error('Error fetching  images:', error);
       }
     };
-    const fetchBaseImg = async () => {
+    const fetchBaseImg = async (year, month, indices, number) => {
       try {
-        const folderRef = '2022/February/NDVI/baseImg';
+        const folderRef = `${year}/${month}/${indices}/baseImg`;
         const response = await getStorageItem(folderRef);
         const imageUrls = response.items.map(item => item.downloadURL);
-        setBaseImg1(imageUrls);
+        if (number === 1) { setBaseImg1(imageUrls); }
+        else if (number === 2) { setBaseImg2(imageUrls); }
+        else console.error('Invalid number argument:', number);
+
         console.log(imageUrls)
       } catch (error) {
-        console.error('Error fetching February images:', error);
+        console.error('Error fetching  images:', error);
       }
     };
-    fetchSlideShowImages();
-    fetchBaseImg()
+    fetchSlideShowImages(selectedYear1, selectedMonth1, selectedIndice1, 1);
+    fetchBaseImg(selectedYear1, selectedMonth1, selectedIndice1, 1);
   }, [getStorageItem]);
 
   return (
@@ -162,9 +167,7 @@ function App() {
         <div >
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
             <Dropdown style={{ marginLeft: '10px' }}>
-              <Dropdown.Toggle variant="success" id="dropdown-year">
-                {selectedYear1}
-              </Dropdown.Toggle>
+              <Dropdown.Toggle variant="success" id="dropdown-year"> {selectedYear1}</Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((year) => (
                   <Dropdown.Item key={year} onClick={() => handleYearChange(year)}>
@@ -202,11 +205,11 @@ function App() {
           </div>
 
           <div style={{ marginTop: '20px', marginLeft: '10px' }}>
-            <h3>Selected Image:</h3>
             <img src={baseImg1} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
           <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
+            <h3>Plots:</h3>
             <Carousel>
               {renderCarouselItems()}
             </Carousel>

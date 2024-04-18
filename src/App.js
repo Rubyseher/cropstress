@@ -34,6 +34,10 @@ function App() {
   const timelapseValues = ['Nov 2021 - Apr 2022', 'Nov 2022 - Apr 2023', 'Nov 2021 - Apr 2022 & Nov 2022 - Apr 2023'];
   const indice = ['NDVI', 'TVI', 'NDMI'];
   const [imageList1, setImagesList1] = useState([]);
+  const [imageList2, setImagesList2] = useState([]);
+  const [baseImg1, setBaseImg1] = useState();
+  const [baseImg2, setBaseImg2] = useState();
+  
 
   const [selectedMonth1, setSelectedMonth1] = useState('January');
   const [selectedYear1, setSelectedYear1] = useState('2022');
@@ -41,9 +45,12 @@ function App() {
   const [selectedMonth2, setSelectedMonth2] = useState('January');
   const [selectedYear2, setSelectedYear2] = useState('2022');
   const [selectedIndice2, setSelectedIndice2] = useState('NDVI');
+
   const [showTimeLapse, setShowTimeLapse] = useState(false);
   const [selectedTimeLapse, setSelectedTimeLapse] = useState('Nov 2021 - Apr 2022');
+
   const [showHomePage, setShowHomePage] = useState(true);
+
   const backgroundStyle = {
     backgroundImage: 'url(cropBg3.jpg)',
     backgroundSize: 'cover',
@@ -70,7 +77,7 @@ function App() {
 
   const handleIndiceChange2 = (indice) => { setSelectedIndice2(indice); };
 
-  const getImageUrl = () => {
+  const getBaseImg = () => {
     if (imageList1 && imageList1.length > 0) {
       return imageList1; // Assuming the first item in the list is the URL of the image
     } else {
@@ -82,13 +89,13 @@ function App() {
     return `${selectedMonth2}_${selectedYear2}_${selectedIndice2}.png`;
   };
 
-  const renderCarouselItems = (month, year, indice) => {
-    return carouselType.map((type) => (
-      <Carousel.Item key={type}>
+  const renderCarouselItems = () => {
+    return imageList1.map((imageUrl, index) => (
+      <Carousel.Item key={index}>
         <img
           className="d-block w-100"
-          src={`./images/${month}_${year}_${indice}_${type}.png`}
-          alt={`${month} ${year} ${indice}`}
+          src={imageUrl}
+          alt={`Image ${index}`}
         />
       </Carousel.Item>
     ));
@@ -109,9 +116,19 @@ function App() {
         console.error('Error fetching February images:', error);
       }
     };
-
-    // Call the function to fetch February images
+    const fetchBaseImg = async () => {
+      try {
+        const folderRef = '2022/February/NDVI/baseImg';
+        const response = await getStorageItem(folderRef);
+        const imageUrls = response.items.map(item => item.downloadURL);
+        setBaseImg1(imageUrls);
+        console.log(imageUrls)
+      } catch (error) {
+        console.error('Error fetching February images:', error);
+      }
+    };
     fetchFebruaryImages();
+    fetchBaseImg()
   }, [getStorageItem]);
 
 
@@ -195,12 +212,12 @@ function App() {
 
           <div style={{ marginTop: '20px', marginLeft: '10px' }}>
             <h3>Selected Image:</h3>
-            <img src={imageList1[0]} alt="Selected" style={{ width: '700px', height: '600px' }} />
+            <img src={baseImg1} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
           <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
             <Carousel>
-              {renderCarouselItems(selectedMonth1, selectedYear1, selectedIndice1)}
+              {renderCarouselItems()}
             </Carousel>
           </div>
         </div>

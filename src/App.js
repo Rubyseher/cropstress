@@ -227,7 +227,7 @@ function App() {
       {showTimeLapse === true && <div >
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
           <Dropdown style={{ marginLeft: '10px' }}>
-            <Dropdown.Toggle id="dropdown-year" variant="success" >
+            <Dropdown.Toggle id="dropdown-year" variant="outline-success" >
               <b>{selectedIndice1}</b>
             </Dropdown.Toggle>
             <Dropdown.Menu>

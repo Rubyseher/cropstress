@@ -199,8 +199,7 @@ function App() {
           </div>
 
           <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
-            <h3>Plots:</h3>
-            <Carousel>{renderCarouselItems()} </Carousel>
+            <h3>Plots:</h3><Carousel>{renderCarouselItems()} </Carousel>
           </div>
         </div>
 

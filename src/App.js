@@ -1,4 +1,4 @@
-import React, { useState ,useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
@@ -33,7 +33,7 @@ function App() {
   ];
   const timelapseValues = ['Nov 2021 - Apr 2022', 'Nov 2022 - Apr 2023', 'Nov 2021 - Apr 2022 & Nov 2022 - Apr 2023'];
   const indice = ['NDVI', 'TVI', 'NDMI'];
-  const [imageList1,setImagesList1] = useState([]);
+  const [imageList1, setImagesList1] = useState([]);
 
   const [selectedMonth1, setSelectedMonth1] = useState('January');
   const [selectedYear1, setSelectedYear1] = useState('2022');
@@ -71,9 +71,13 @@ function App() {
   const handleIndiceChange2 = (indice) => { setSelectedIndice2(indice); };
 
   const getImageUrl = () => {
-    return imageList1[0];
-    // return `${selectedMonth1}_${selectedYear1}_${selectedIndice1}.png`;
+    if (imageList1 && imageList1.length > 0) {
+      return imageList1; // Assuming the first item in the list is the URL of the image
+    } else {
+      return 'placeholder_image_url.jpg';
+    }
   };
+
   const getImageUrl2 = () => {
     return `${selectedMonth2}_${selectedYear2}_${selectedIndice2}.png`;
   };
@@ -90,14 +94,25 @@ function App() {
     ));
   };
 
-  const {getStorageItem} = useDB();
-  
-useEffect(() => {
-  getStorageItem('2022/February/NDVI/1-1.5_NDVI_02_02_2022.png', (url) => {
-    console.log(url);
-    setImagesList1([url])
-})
-}, [])
+  const { getStorageItem } = useDB();
+
+  useEffect(() => {
+    // Function to fetch images inside "2022/February" folder
+    const fetchFebruaryImages = async () => {
+      try {
+        const folderRef = '2022/February/NDVI';
+        const response = await getStorageItem(folderRef);
+        const imageUrls = response.items.map(item => item.downloadURL);
+        setImagesList1(imageUrls);
+        console.log(imageUrls)
+      } catch (error) {
+        console.error('Error fetching February images:', error);
+      }
+    };
+
+    // Call the function to fetch February images
+    fetchFebruaryImages();
+  }, [getStorageItem]);
 
 
   // const getImagePlotUrl = (month, year, indice, img) => {
@@ -180,15 +195,14 @@ useEffect(() => {
 
           <div style={{ marginTop: '20px', marginLeft: '10px' }}>
             <h3>Selected Image:</h3>
-            <img src={imageList1[0]  } alt="Selected" style={{ width: '700px', height: '600px' }} />
+            <img src={imageList1[0]} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
-          {/* <img src={getImagePlotUrl(selectedMonth1, selectedYear1, selectedIndice1, imageType)} alt="Selected" style={{ width: '600px', height: '500px' }} /> */}
-          {/* <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
+          <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
             <Carousel>
               {renderCarouselItems(selectedMonth1, selectedYear1, selectedIndice1)}
             </Carousel>
-          </div> */}
+          </div>
         </div>
 
         {/* <div>

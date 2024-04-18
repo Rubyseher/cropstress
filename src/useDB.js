@@ -1,7 +1,7 @@
 // useDB.js
 import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getStorage, ref,listAll, getDownloadURL } from "firebase/storage";
 import config from './config';
 import 'firebase/analytics';
 
@@ -13,20 +13,30 @@ const useDB = () => {
         setStorage(getStorage());
     }, []);
 
-    const getStorageItem = (path, callback) => {
+    const getStorageItem = async (path) => {
         if (!storage) return;
 
-        getDownloadURL(ref(storage, path))
-            .then((url) => {
-                // `url` is the download URL for 'images/stars.jpg'
+        try {
+            const folderRef = ref(storage, path);
+            const items = await listAll(folderRef);
 
-                // This can be downloaded directly:
-               
-                callback(url)
-            })
-            .catch((error) => {
-                console.error(error);
+            const itemDetailsPromises = items.items.map(itemRef => {
+                return getDownloadURL(itemRef).then(downloadURL => ({
+                    downloadURL,
+                    fullPath: itemRef.fullPath
+                }));
             });
+
+            // Wait for all promises to resolve
+            const itemDetails = await Promise.all(itemDetailsPromises);
+
+            return {
+                items: itemDetails
+            };
+        } catch (error) {
+            console.error('Error getting storage item:', error);
+            throw error;
+        }
     };
 
     return { getStorageItem };

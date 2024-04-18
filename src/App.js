@@ -11,6 +11,7 @@ import { faLeaf } from '@fortawesome/free-solid-svg-icons'
 import Carousel from 'react-bootstrap/Carousel';
 import './App.css';
 import useDB from './useDB';
+import { TypeAnimation } from 'react-type-animation';
 
 function App() {
   const months = {
@@ -50,27 +51,27 @@ function App() {
     textAlign: 'center',
   };
 
-  const handleYearChange = (year,number) => { 
-    if (number === 1){
+  const handleYearChange = (year, number) => {
+    if (number === 1) {
       setSelectedYear1(year); setSelectedMonth1(months[year][0])
     }
-    else if (number === 2){
+    else if (number === 2) {
       setSelectedYear2(year); setSelectedMonth2(months[year][0])
     }
     else console.error('Invalid number argument:', number);
-   };
+  };
 
   const renderCarouselItems = (number) => {
     if (number === 1) {
       return imageList1.map((imageUrl, index) => (
         <Carousel.Item key={index}>
-          <img className="d-block w-100" src={imageUrl} alt={`Image ${index}`}/>
+          <img className="d-block w-100" src={imageUrl} alt={`Image ${index}`} />
         </Carousel.Item>
       ));
     } else if (number === 2) {
       return imageList2.map((imageUrl, index) => (
         <Carousel.Item key={index}>
-          <img className="d-block w-100" src={imageUrl} alt={`Image ${index}`}/>
+          <img className="d-block w-100" src={imageUrl} alt={`Image ${index}`} />
         </Carousel.Item>
       ));
     } else {
@@ -91,8 +92,8 @@ function App() {
         else if (number === 2) { setImagesList2(imageUrls); }
         else console.error('Invalid number argument:', number);
 
-        
-        if (number === 2) { console.log(imageUrls)}
+
+        if (number === 2) { console.log(imageUrls) }
       } catch (error) {
         console.error('Error fetching  images:', error);
       }
@@ -136,7 +137,8 @@ function App() {
         showHomePage === true && <div style={backgroundStyle}>
           {/* <img src='cropBg3.jpg' alt="Selected"  style={{height:'103vh',width:'176vh'}} /> */}
           <div onClick={() => { setShowTimeLapse(false); setShowHomePage(false) }}>
-            <h1 style={{ fontSize: '83px' }}>Crop Stress Management</h1>
+            <TypeAnimation sequence={['Crop Stress Management']}  wrapper="span" speed={9} cursor={false} style={{ fontSize: '80px', display: 'inline-block' ,fontWeight:'500'}}
+            />
           </div>
         </div>
       }
@@ -149,7 +151,7 @@ function App() {
               <Dropdown.Toggle variant="outline-success" id="dropdown-year"> <b>{selectedYear1}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((year) => (
-                  <Dropdown.Item key={year} onClick={() => handleYearChange(year,1)}>{year}</Dropdown.Item>
+                  <Dropdown.Item key={year} onClick={() => handleYearChange(year, 1)}>{year}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
@@ -182,13 +184,13 @@ function App() {
           </div>
         </div>
 
-        <div style={{ marginLeft: '100px' ,borderLeft:'3px solid grey'}}>
+        <div style={{ marginLeft: '100px', borderLeft: '3px solid grey' }}>
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: '90px' }}>
             <Dropdown style={{ marginLeft: '10px' }}>
               <Dropdown.Toggle variant="outline-success" id="dropdown-year"> <b>{selectedYear2}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((year) => (
-                  <Dropdown.Item key={year} onClick={() => handleYearChange(year,2)}>{year}</Dropdown.Item>
+                  <Dropdown.Item key={year} onClick={() => handleYearChange(year, 2)}>{year}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
@@ -216,7 +218,7 @@ function App() {
             <img src={baseImg2} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
-          <div style={{ marginTop: '20px', width: '600px', marginLeft:'90px' }}>
+          <div style={{ marginTop: '20px', width: '600px', marginLeft: '90px' }}>
             <h3>Plots:</h3><Carousel>{renderCarouselItems(2)} </Carousel>
           </div>
 

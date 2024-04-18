@@ -91,16 +91,23 @@ function App() {
     return `${selectedMonth2}_${selectedYear2}_${selectedIndice2}.png`;
   };
 
-  const renderCarouselItems = () => {
-    return imageList1.map((imageUrl, index) => (
-      <Carousel.Item key={index}>
-        <img
-          className="d-block w-100"
-          src={imageUrl}
-          alt={`Image ${index}`}
-        />
-      </Carousel.Item>
-    ));
+  const renderCarouselItems = (number) => {
+    if (number === 1) {
+      return imageList1.map((imageUrl, index) => (
+        <Carousel.Item key={index}>
+          <img className="d-block w-100" src={imageUrl} alt={`Image ${index}`}/>
+        </Carousel.Item>
+      ));
+    } else if (number === 2) {
+      return imageList2.map((imageUrl, index) => (
+        <Carousel.Item key={index}>
+          <img className="d-block w-100" src={imageUrl} alt={`Image ${index}`}/>
+        </Carousel.Item>
+      ));
+    } else {
+      console.error('Invalid number argument:', number);
+      return null;
+    }
   };
 
   const { getStorageItem } = useDB();
@@ -115,7 +122,8 @@ function App() {
         else if (number === 2) { setImagesList2(imageUrls); }
         else console.error('Invalid number argument:', number);
 
-        console.log(imageUrls)
+        
+        if (number === 2) { console.log(imageUrls)}
       } catch (error) {
         console.error('Error fetching  images:', error);
       }
@@ -129,13 +137,15 @@ function App() {
         else if (number === 2) { setBaseImg2(imageUrls); }
         else console.error('Invalid number argument:', number);
 
-        console.log(imageUrls)
+        // console.log(imageUrls)
       } catch (error) {
         console.error('Error fetching  images:', error);
       }
     };
     fetchSlideShowImages(selectedYear1, selectedMonth1, selectedIndice1, 1);
     fetchBaseImg(selectedYear1, selectedMonth1, selectedIndice1, 1);
+    fetchSlideShowImages(selectedYear2, selectedMonth2, selectedIndice2, 2);
+    fetchBaseImg(selectedYear2, selectedMonth2, selectedIndice2, 2);
   }, [getStorageItem]);
 
   return (
@@ -199,64 +209,49 @@ function App() {
           </div>
 
           <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
-            <h3>Plots:</h3><Carousel>{renderCarouselItems()} </Carousel>
+            <h3>Plots:</h3><Carousel>{renderCarouselItems(1)} </Carousel>
           </div>
         </div>
 
-        {/* <div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id="dropdown-month">
-                {selectedMonth2}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {months.map((month) => (
-                  <Dropdown.Item key={month} onClick={() => handleMonthChange2(month)}>
-                    {month}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
             <Dropdown style={{ marginLeft: '10px' }}>
-              <Dropdown.Toggle variant="success" id="dropdown-year">
-                {selectedYear2}
-              </Dropdown.Toggle>
+              <Dropdown.Toggle variant="outline-success" id="dropdown-year"> <b>{selectedYear2}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((year) => (
-                  <Dropdown.Item key={year} onClick={() => handleYearChange2(year)}>
-                    {year}
-                  </Dropdown.Item>
+                  <Dropdown.Item key={year} onClick={() => handleYearChange2(year)}>{year}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
 
             <Dropdown style={{ marginLeft: '10px' }}>
-              <Dropdown.Toggle variant="success" id="dropdown-year">
-                {selectedIndice2}
-              </Dropdown.Toggle>
+              <Dropdown.Toggle variant="outline-success" id="dropdown-month"><b>{selectedMonth2}</b></Dropdown.Toggle>
+              <Dropdown.Menu>
+                {months[selectedYear2].map((month) => (
+                  <Dropdown.Item key={month} onClick={() => handleMonthChange2(month)}>{month}</Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <Dropdown style={{ marginLeft: '10px' }}>
+              <Dropdown.Toggle variant="outline-success" id="dropdown-year"><b>{selectedIndice2}</b></Dropdown.Toggle>
               <Dropdown.Menu>
                 {indice.map((indice) => (
-                  <Dropdown.Item key={indice} onClick={() => handleIndiceChange2(indice)}>
-                    {indice}
-                  </Dropdown.Item>
+                  <Dropdown.Item key={indice} onClick={() => handleIndiceChange2(indice)}>{indice}</Dropdown.Item>
                 ))}
               </Dropdown.Menu>
             </Dropdown>
           </div>
 
           <div style={{ marginTop: '20px', marginLeft: '10px' }}>
-            <h3>Selected Image:</h3>
-            <img src={getImageUrl2()} alt="Selected" style={{ width: '700px', height: '600px' }} />
+            <img src={baseImg2} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
           <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
-            <Carousel>
-              {renderCarouselItems(selectedMonth2, selectedYear2, selectedIndice2)}
-            </Carousel>
+            <h3>Plots:</h3><Carousel>{renderCarouselItems(2)} </Carousel>
           </div>
 
-        </div> */}
+        </div>
       </div>
       }
 

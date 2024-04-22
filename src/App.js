@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav';
-// import ButtonGroup from 'react-bootstrap/ButtonGroup';
-// import ToggleButton from 'react-bootstrap/ToggleButton';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -25,6 +23,8 @@ function App() {
   const [imageList2, setImagesList2] = useState([]);
   const [baseImg1, setBaseImg1] = useState();
   const [baseImg2, setBaseImg2] = useState();
+  const [histogram1, setHistogram1] = useState();
+  const [histogram2, setHistogram2] = useState();
 
   const [selectedMonth1, setSelectedMonth1] = useState(months['2022'][0]);
   const [selectedYear1, setSelectedYear1] = useState('2022');
@@ -92,7 +92,6 @@ function App() {
         else if (number === 2) { setImagesList2(imageUrls); }
         else console.error('Invalid number argument:', number);
 
-
         if (number === 2) { console.log(imageUrls) }
       } catch (error) {
         console.error('Error fetching  images:', error);
@@ -112,10 +111,26 @@ function App() {
         console.error('Error fetching  images:', error);
       }
     };
+    const fetchHistogram = async (year, month, indices, number) => {
+      try {
+        const folderRef = `${year}/${month}/${indices}/histogram`;
+        const response = await getStorageItem(folderRef);
+        const imageUrls = response.items.map(item => item.downloadURL);
+        if (number === 1) { setHistogram1(imageUrls); }
+        else if (number === 2) { setHistogram2(imageUrls); }
+        else console.error('Invalid number argument:', number);
+
+        // console.log(imageUrls)
+      } catch (error) {
+        console.error('Error fetching  images:', error);
+      }
+    };
     fetchSlideShowImages(selectedYear1, selectedMonth1, selectedIndice1, 1);
     fetchBaseImg(selectedYear1, selectedMonth1, selectedIndice1, 1);
+    fetchHistogram(selectedYear1, selectedMonth1, selectedIndice1, 1);
     fetchSlideShowImages(selectedYear2, selectedMonth2, selectedIndice2, 2);
     fetchBaseImg(selectedYear2, selectedMonth2, selectedIndice2, 2);
+    fetchHistogram(selectedYear1, selectedMonth1, selectedIndice1, 2);
   }, [getStorageItem]);
 
   return (
@@ -182,6 +197,10 @@ function App() {
           <div style={{ marginTop: '20px', width: '600px', margin: '0 auto' }}>
             <h3>Plots:</h3><Carousel>{renderCarouselItems(1)} </Carousel>
           </div>
+
+          <div style={{ marginTop: '70px', marginLeft: '10px' }}>
+            <img src={histogram1} alt="Selected" style={{ width: '700px', height: '600px' }} />
+          </div>
         </div>
 
         <div style={{ marginLeft: '100px', borderLeft: '3px solid grey' }}>
@@ -214,12 +233,16 @@ function App() {
             </Dropdown>
           </div>
 
-          <div style={{ marginTop: '20px', marginLeft: '90px' }}>
+          <div style={{ marginTop: '10px', marginLeft: '90px' }}>
             <img src={baseImg2} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
           <div style={{ marginTop: '20px', width: '600px', marginLeft: '90px' }}>
             <h3>Plots:</h3><Carousel>{renderCarouselItems(2)} </Carousel>
+          </div>
+
+          <div style={{ marginTop: '60px', marginLeft: '10px' }}>
+            <img src={histogram2} alt="Selected" style={{ width: '700px', height: '600px' }} />
           </div>
 
         </div>

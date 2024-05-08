@@ -25,6 +25,7 @@ function App() {
   const [baseImg2, setBaseImg2] = useState();
   const [histogram1, setHistogram1] = useState();
   const [histogram2, setHistogram2] = useState();
+  const [timelapseData, setTimelapseData] = useState();
 
   const [selectedMonth1, setSelectedMonth1] = useState(months['2022'][0]);
   const [selectedYear1, setSelectedYear1] = useState('2022');
@@ -83,6 +84,19 @@ function App() {
   const { getStorageItem } = useDB();
 
   useEffect(() => {
+    const fetchTimelapse = async (indice) => {
+      try {
+        const folderRef = `Timelapse`;
+        const response = await getStorageItem(folderRef);
+        const imageUrls = response.items.map(item => item.downloadURL);
+        const selectedTimelapseUrl = imageUrls.find(url => url.includes(selectedIndice1));
+        // Set the selected timelapse URL
+        setTimelapseData(selectedTimelapseUrl);
+        console.log(selectedTimelapseUrl);
+      } catch (error) {
+        console.error('Error fetching  images:', error);
+      }
+    };
     const fetchSlideShowImages = async (year, month, indices, number) => {
       try {
         const folderRef = `${year}/${month}/${indices}`;
@@ -126,6 +140,7 @@ function App() {
       }
     };
     fetchSlideShowImages(selectedYear1, selectedMonth1, selectedIndice1, 1);
+    fetchTimelapse(selectedIndice1)
     fetchBaseImg(selectedYear1, selectedMonth1, selectedIndice1, 1);
     fetchHistogram(selectedYear1, selectedMonth1, selectedIndice1, 1);
     fetchSlideShowImages(selectedYear2, selectedMonth2, selectedIndice2, 2);
@@ -152,7 +167,7 @@ function App() {
         showHomePage === true && <div style={backgroundStyle}>
           {/* <img src='cropBg3.jpg' alt="Selected"  style={{height:'103vh',width:'176vh'}} /> */}
           <div onClick={() => { setShowTimeLapse(false); setShowHomePage(false) }}>
-            <TypeAnimation sequence={['Crop Stress Management']}  wrapper="span" speed={9} cursor={false} style={{ fontSize: '80px', display: 'inline-block' ,fontWeight:'500'}}
+            <TypeAnimation sequence={['Crop Stress Management']} wrapper="span" speed={9} cursor={false} style={{ fontSize: '80px', display: 'inline-block', fontWeight: '500' }}
             />
           </div>
         </div>
@@ -267,7 +282,7 @@ function App() {
 
         <div style={{ marginTop: '20px', marginLeft: '10px' }}>
           <h3>Selected Timelapse:</h3>
-          <img src={`${selectedIndice1}.mp4`} alt="Selected" />
+          <img src={timelapseData} alt="Selected" />
         </div>
 
       </div>

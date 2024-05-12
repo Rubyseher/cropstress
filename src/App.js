@@ -146,7 +146,7 @@ function App() {
     fetchSlideShowImages(selectedYear2, selectedMonth2, selectedIndice2, 2);
     fetchBaseImg(selectedYear2, selectedMonth2, selectedIndice2, 2);
     fetchHistogram(selectedYear1, selectedMonth1, selectedIndice1, 2);
-  }, [getStorageItem]);
+  }, [getStorageItem,selectedIndice1, selectedIndice2, selectedMonth1, selectedMonth2, selectedYear1, selectedYear2]);
 
   return (
     <div >

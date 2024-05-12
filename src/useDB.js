@@ -1,5 +1,5 @@
 // useDB.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect ,useCallback} from 'react';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref,listAll, getDownloadURL } from "firebase/storage";
 import config from './config';
@@ -13,7 +13,8 @@ const useDB = () => {
         setStorage(getStorage());
     }, []);
 
-    const getStorageItem = async (path) => {
+    
+    const getStorageItem = useCallback(async (path) => {
         if (!storage) return;
 
         try {
@@ -37,7 +38,8 @@ const useDB = () => {
             console.error('Error getting storage item:', error);
             throw error;
         }
-    };
+      }, [storage]);
+
 
     return { getStorageItem };
 };
